@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CSV Encoding Fixer — in your browser</title>
+    <meta
+      name="description"
+      content="Fix Shift_JIS, GBK, Windows-1252 and UTF-8 BOM CSV files in your browser. Nothing is uploaded. Download clean UTF-8 for Excel."
+    />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">
+        <img src="assets/favicon.svg" alt="" width="28" height="28" />
+        <span data-i18n="brand">CSV Encoding Fixer</span>
+      </div>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="is-active">EN</button>
+        <button type="button" data-lang="ja">日本語</button>
+        <button type="button" data-lang="zh">中文</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1 data-i18n="title">Fix CSV encoding without leaving your computer</h1>
+        <p class="lede" data-i18n="lede">
+          Drop one or more CSV files. This page guesses Shift_JIS, GB18030/GBK, Windows-1252, UTF-8 and UTF-8 with a BOM,
+          shows a preview, and lets you download clean UTF-8. Files never leave the browser — there is no server and no tracking script.
+        </p>
+        <p class="pill" data-i18n="privacy">Files stay in your browser. Nothing is uploaded.</p>
+      </section>
+
+      <section class="drop" id="drop">
+        <input id="file-input" type="file" accept=".csv,text/csv,.txt" multiple hidden />
+        <p class="drop-title" data-i18n="dropTitle">Drop CSV files here, or click to choose</p>
+        <p class="drop-hint" data-i18n="dropHint">Several files are fine. Detection runs on this page only.</p>
+        <button type="button" class="btn btn-primary" id="pick" data-i18n="choose">Choose files</button>
+      </section>
+
+      <section id="workspace" class="workspace is-hidden">
+        <div class="toolbar">
+          <label class="check">
+            <input type="checkbox" id="opt-bom" checked />
+            <span data-i18n="optBom">Add a UTF-8 BOM (recommended for Excel on Windows)</span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="opt-merge" />
+            <span data-i18n="optMerge">Merge files that share the same headers</span>
+          </label>
+          <label class="check" id="source-wrap">
+            <input type="checkbox" id="opt-source" checked />
+            <span data-i18n="optSource">Add a source_file column when merging</span>
+          </label>
+          <div class="toolbar-actions">
+            <button type="button" class="btn" id="clear" data-i18n="clear">Clear</button>
+            <button type="button" class="btn btn-primary" id="download" data-i18n="download">Download UTF-8</button>
+          </div>
+        </div>
+        <p class="status" id="status" hidden></p>
+        <div id="files" class="files"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p class="foot-note" data-i18n="footer">
+        Need to merge mixed headers, clean dates, or handle files that are too large to open in Excel?
+        The free
+        <a href="https://github.com/ebhow9986-ctrl/sheetstack-lite?ref=csvfixer">sheetstack-lite</a>
+        command-line tool covers merge and clean, and the paid
+        <a href="https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer">Sheetstack</a>
+        toolkit adds chunked reads and an Excel summary.
+      </p>
+    </footer>
+
+    <script src="assets/csv-fixer.js"></script>
+    <script src="assets/app.js"></script>
+  </body>
+</html>
