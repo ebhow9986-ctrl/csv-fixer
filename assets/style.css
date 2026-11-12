@@ -165,6 +165,64 @@ footer {
 footer a { color: var(--amber); }
 footer a:hover { color: #fff; }
 
+/* tabs + JSON / table -> CSV */
+.tabs { display: flex; gap: 0.35rem; margin-top: 1.4rem; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.tab {
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-bottom: none;
+  background: transparent;
+  color: var(--muted);
+  padding: 0.55rem 1rem;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+.tab:hover { color: var(--navy); }
+.tab.is-active { background: #fff; color: var(--navy); border-color: var(--line); border-bottom: 1px solid #fff; }
+.tab:focus-visible, .btn:focus-visible, .paste:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+#panel-fix .drop { margin-top: 1rem; }
+.convert { margin-top: 1rem; display: grid; gap: 0.7rem; }
+.convert-head { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: flex-end; justify-content: space-between; }
+.field-label { font-weight: 700; color: var(--navy); }
+.convert-opts { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; }
+.inline { display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: var(--muted); }
+.inline select {
+  font: inherit;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.3rem 0.5rem;
+  background: #fff;
+  color: var(--ink);
+}
+.inline select:disabled { opacity: 0.5; }
+.paste {
+  width: 100%;
+  min-height: 12rem;
+  resize: vertical;
+  font: 0.85rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans Mono CJK JP", monospace;
+  border: 2px dashed #b8c4d4;
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 0.9rem 1rem;
+  color: var(--ink);
+}
+.paste:focus { border-color: var(--teal); background: #fbfefd; }
+.drop-hint.small { font-size: 0.85rem; margin: -0.3rem 0 0; }
+.scroll-x { overflow-x: auto; }
+.csv-out {
+  margin: 0;
+  background: #f7f9fc;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  font: 0.8rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre;
+  overflow-x: auto;
+  max-height: 16rem;
+}
+
 @media (max-width: 640px) {
   .toolbar-actions { justify-content: stretch; }
   .toolbar-actions .btn { flex: 1; }
