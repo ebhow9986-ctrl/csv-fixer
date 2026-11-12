@@ -1,6 +1,6 @@
 # CSV Encoding Fixer
 
-A single static page that repairs CSV files with mixed encodings (UTF-8, UTF-8 BOM, Shift_JIS, GB18030/GBK, Windows-1252 / CP1252, and a few relatives). You drop one or more files, check a preview, override the encoding if the guess is wrong, optionally merge files that already share the same headers, and download UTF-8 — with or without a BOM for Excel on Windows.
+A single static page with two tools: **Fix encoding** and **JSON / table → CSV** (see below). The first tool repairs CSV files with mixed encodings (UTF-8, UTF-8 BOM, Shift_JIS, GB18030/GBK, Windows-1252 / CP1252, and a few relatives). You drop one or more files, check a preview, override the encoding if the guess is wrong, optionally merge files that already share the same headers, and download UTF-8 — with or without a BOM for Excel on Windows.
 
 **Files never leave the browser.** There is no server, no account, and no tracking or analytics script. Detection and conversion run in JavaScript with `TextDecoder`.
 
@@ -17,6 +17,31 @@ Open `index.html` in a current desktop browser (Chrome, Firefox, Edge, or Safari
 
 The interface is English by default, with a 日本語 / 中文 toggle (stored only in `localStorage` on your machine).
 
+## Tab 2: JSON / table → CSV
+
+The second tab (“JSON / table → CSV”, or open `index.html#json`) turns pasted text into a clean CSV. Nothing is uploaded; it is the same static page.
+
+Paste one of:
+
+- **JSON**: an object, an array of objects, or nested objects. An API wrapper with exactly one array of objects (`{"data": [...], "total": 3}`) uses that array as the rows.
+- **An HTML `<table>`**: copied from a web page or admin screen. When you paste with Ctrl+V, the page uses the clipboard's HTML version if it contains a table, so merged cells are kept. Ctrl+Shift+V pastes plain text instead.
+- **Cells copied from a spreadsheet** (tab-separated), or CSV / semicolon / pipe text.
+
+Input type is auto-detected (`{`/`[` → JSON, `<table` → HTML, anything else → delimited text) and can be forced with the “Input type” menu.
+
+Rules, kept stable so the same input always gives the same columns:
+
+- Nested keys are joined with a dot: `{"user": {"name": "Aiko"}}` → `user.name`.
+- Arrays, default: one column per item, `tags.0`, `tags.1`, `items.0.sku`. Option: keep the whole array as compact JSON text in one cell.
+- Columns are in first-seen order across all rows. A row missing a key gets an empty cell.
+- `null` → empty, `true`/`false` → `true`/`false`. Numbers keep their exact source text (`12345678901234567890` and `1.50` are not rounded), and object key order is kept as written. The page uses its own small JSON parser for this.
+- An empty `[]` or `{}` gets an empty cell under its own key, unless other rows have values under that key.
+- Invalid JSON shows the line, column, and reason (for example `trailing comma before '}'`). Single quotes, comments and trailing commas are rejected as in standard JSON.
+- HTML: `rowspan` / `colspan` copy the cell text into every cell they cover. `<br>` and block tags become line breaks inside the cell; entities are decoded; `<script>`, `<style>` and `<caption>` are ignored.
+- Tables and TSV: the first row is the header by default (switch off to get `column_1`, `column_2`…). Empty header names become `column_N` and repeats get `_2`, `_3`. With “Trim” on (default), cell spaces are trimmed, blank rows are removed, and trailing empty columns are dropped.
+
+Output is comma-separated UTF-8 with CRLF line endings, quoting fields that contain quotes, commas or line breaks. The BOM setting is shared with the first tab and is on by default. You can also copy the CSV to the clipboard.
+
 ## Folder
 
 ```
@@ -24,7 +49,8 @@ index.html
 README.md
 assets/style.css
 assets/csv-fixer.js   # encoding, CSV, UTF-8, zip — used by the page and by tests
-assets/app.js
+assets/table-convert.js # JSON flatten, HTML table / TSV parse → CSV — used by the page and by tests
+assets/app.js         # UI for both tabs (EN / 日本語 / 中文)
 assets/favicon.svg
 test/test.mjs         # Node tests against the sheetstack-lite sample CSVs
 ```
@@ -46,6 +72,10 @@ The suite reads the real samples in `/workspace/gumroad/github-lite/samples` (or
 - UTF-8 with and without a BOM
 - Merge only when headers match
 - Zip packaging
+
+And for the JSON / table tab (no sample files needed): nested JSON flattening, arrays of objects, array modes, API wrappers, exact big numbers, invalid JSON messages with line/column, empty input, HTML tables with entities / `<br>` / omitted closing tags / nested tables, rowspan and colspan, TSV pasted from a spreadsheet, quote/comma/newline escaping with a round trip, BOM on/off bytes, header de-duplication, and that every UI string exists in EN / 日本語 / 中文.
+
+All tests must print `OK`; the script exits non-zero on the first failure.
 
 ## Deploy on GitHub Pages (free)
 
@@ -75,6 +105,7 @@ Do not add a counter later without a clear decision: a privacy-friendly host suc
 - Header names must already match before a merge. Aliases such as `伝票番号` vs `Order ID` are not renamed.
 - Delimiters sniffed from the first line: comma, semicolon, tab, or pipe.
 - Encoding detection is a heuristic. You can always override it.
+- JSON / table tab: everything is in memory in a text box, so it is meant for pasted snippets up to a few MB, not huge exports. Only the first `<table>` is converted (the status line says how many were found). A table nested inside a cell becomes plain text in that cell. Spans are capped at 1000 and `rowspan="0"` is treated as 1. Keys that already contain a dot are not escaped, so `{"a.b": 1}` and `{"a": {"b": 1}}` both give `a.b`. Very wide arrays produce many columns; use the “Keep as JSON text” option for those. Output is always comma-separated UTF-8; Shift_JIS export is not offered. Excel may still show long digit strings in scientific notation when it opens the file; the CSV itself keeps every digit.
 
 ## License
 

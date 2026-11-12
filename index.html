@@ -6,7 +6,7 @@
     <title>CSV Encoding Fixer — in your browser</title>
     <meta
       name="description"
-      content="Fix Shift_JIS, GBK, Windows-1252 and UTF-8 BOM CSV files in your browser. Nothing is uploaded. Download clean UTF-8 for Excel."
+      content="Fix Shift_JIS, GBK, Windows-1252 and UTF-8 BOM CSV files in your browser. Also turn JSON or a pasted HTML table into CSV. Nothing is uploaded. Download clean UTF-8 for Excel."
     />
     <meta name="referrer" content="no-referrer-when-downgrade" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
@@ -27,13 +27,20 @@
 
     <main>
       <section class="hero">
-        <h1 data-i18n="title">Fix CSV encoding without leaving your computer</h1>
-        <p class="lede" data-i18n="lede">
+        <h1 id="hero-title" data-i18n="title">Fix CSV encoding without leaving your computer</h1>
+        <p class="lede" id="hero-lede" data-i18n="lede">
           Drop one or more CSV files. This page guesses Shift_JIS, GB18030/GBK, Windows-1252, UTF-8 and UTF-8 with a BOM,
           shows a preview, and lets you download clean UTF-8. Files never leave the browser — there is no server and no tracking script.
         </p>
-        <p class="pill" data-i18n="privacy">Files stay in your browser. Nothing is uploaded.</p>
+        <p class="pill" id="hero-privacy" data-i18n="privacy">Files stay in your browser. Nothing is uploaded.</p>
       </section>
+
+      <div class="tabs" role="tablist" aria-label="Tool" data-i18n-aria="tabsLabel">
+        <button type="button" role="tab" id="tab-fix" class="tab is-active" aria-selected="true" aria-controls="panel-fix" data-i18n="tabFix">Fix encoding</button>
+        <button type="button" role="tab" id="tab-json" class="tab" aria-selected="false" aria-controls="panel-json" tabindex="-1" data-i18n="tabJson">JSON / table → CSV</button>
+      </div>
+
+      <div role="tabpanel" id="panel-fix" aria-labelledby="tab-fix">
 
       <section class="drop" id="drop">
         <input id="file-input" type="file" accept=".csv,text/csv,.txt" multiple hidden />
@@ -64,6 +71,58 @@
         <p class="status" id="status" hidden></p>
         <div id="files" class="files"></div>
       </section>
+      </div>
+
+      <div role="tabpanel" id="panel-json" aria-labelledby="tab-json" hidden>
+        <section class="convert">
+          <div class="convert-head">
+            <label for="jt-input" class="field-label" data-i18n="jInputLabel">Paste JSON, an HTML &lt;table&gt;, or cells copied from a spreadsheet</label>
+            <div class="convert-opts">
+              <label class="inline">
+                <span data-i18n="jMode">Input type</span>
+                <select id="jt-mode">
+                  <option value="auto" data-i18n="jModeAuto">Auto-detect</option>
+                  <option value="json">JSON</option>
+                  <option value="html" data-i18n="jModeHtml">HTML table</option>
+                  <option value="delimited" data-i18n="jModeDelim">TSV / CSV paste</option>
+                </select>
+              </label>
+              <label class="inline">
+                <span data-i18n="jArrays">JSON arrays</span>
+                <select id="jt-arrays">
+                  <option value="index" data-i18n="jArraysIndex">One column per item (tags.0, tags.1)</option>
+                  <option value="json" data-i18n="jArraysJson">Keep as JSON text in one cell</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <textarea id="jt-input" class="paste" rows="10" spellcheck="false" autocomplete="off"
+            placeholder='[{"id": 1, "user": {"name": "Aiko", "city": "Osaka"}, "tags": ["new", "vip"]}]'></textarea>
+          <p class="drop-hint small" id="jt-paste-note" data-i18n="jPasteHint">Tip: text is converted as you type. Copying from a web page keeps merged cells; press Ctrl+Shift+V to paste plain text instead.</p>
+          <div class="toolbar">
+            <label class="check">
+              <input type="checkbox" id="jt-bom" checked />
+              <span data-i18n="optBom">Add a UTF-8 BOM (recommended for Excel on Windows)</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" id="jt-header" checked />
+              <span data-i18n="jHeader">First row is the header (tables and TSV/CSV)</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" id="jt-trim" checked />
+              <span data-i18n="jTrim">Trim spaces around cells and drop empty rows</span>
+            </label>
+            <div class="toolbar-actions">
+              <button type="button" class="btn" id="jt-sample" data-i18n="jSample">Try a sample</button>
+              <button type="button" class="btn" id="jt-clear" data-i18n="clear">Clear</button>
+              <button type="button" class="btn" id="jt-copy" disabled data-i18n="jCopy">Copy CSV</button>
+              <button type="button" class="btn btn-primary" id="jt-download" disabled data-i18n="download">Download UTF-8</button>
+            </div>
+          </div>
+          <p class="status" id="jt-status" role="status" aria-live="polite" hidden></p>
+          <div id="jt-preview" class="files"></div>
+        </section>
+      </div>
     </main>
 
     <footer>
@@ -78,6 +137,7 @@
     </footer>
 
     <script src="assets/csv-fixer.js"></script>
+    <script src="assets/table-convert.js"></script>
     <script src="assets/app.js"></script>
   </body>
 </html>
