@@ -72,7 +72,7 @@
       jErrNoRows: "Nothing to convert: no rows were found.",
       jPreview: "Preview (first 10 rows)",
       footer:
-        'Need to merge mixed headers, clean dates, or handle files that are too large to open in Excel? The free <a href="https://github.com/ebhow9986-ctrl/sheetstack-lite?ref=csvfixer">sheetstack-lite</a> command-line tool covers merge and clean, and the paid <a href="https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer">Sheetstack</a> toolkit adds chunked reads and an Excel summary.',
+        'Need to merge mixed headers, clean dates, or handle files that are too large to open in Excel? The free <a href="https://github.com/ebhow9986-ctrl/sheetstack-lite?ref=csvfixer">sheetstack-lite</a> command-line tool covers merge and clean, and the paid <a href="https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer">Sheetstack</a> toolkit adds chunked reads and an Excel summary. For batch jobs on your own machine, the <a href="https://ebhow.gumroad.com/l/csv-script-pack?ref=csvfixer">CSV/Excel script pack</a> (Python + PowerShell, pay what you want from $5) converts whole folders, merges mixed encodings, keeps leading zeros and flattens JSON. Buying it also supports this free page.',
     },
     ja: {
       brand: "CSV 文字コード修正",
@@ -136,7 +136,7 @@
       jErrNoRows: "変換できる行がありません。",
       jPreview: "プレビュー（先頭 10 行）",
       footer:
-        '見出しの違うファイルの結合、日付の整形、Excel で開けない大きさのファイルには、無料のコマンドラインツール <a href="https://github.com/ebhow9986-ctrl/sheetstack-lite?ref=csvfixer">sheetstack-lite</a> と、分割読み込みや Excel サマリーのある有料の <a href="https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer">Sheetstack</a> があります。',
+        '見出しの違うファイルの結合、日付の整形、Excel で開けない大きさのファイルには、無料のコマンドラインツール <a href="https://github.com/ebhow9986-ctrl/sheetstack-lite?ref=csvfixer">sheetstack-lite</a> と、分割読み込みや Excel サマリーのある有料の <a href="https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer">Sheetstack</a> があります。フォルダ単位の一括変換や自動化には、Python と PowerShell の <a href="https://ebhow.gumroad.com/l/csv-script-pack?ref=csvfixer">CSV/Excel 文字化け・整形スクリプト集</a>（$5 から好きな金額）もあります。購入はこの無料ページの応援にもなります。',
     },
     zh: {
       brand: "CSV 编码修复",
@@ -200,7 +200,7 @@
       jErrNoRows: "没有可转换的行。",
       jPreview: "预览（前 10 行）",
       footer:
-        '如果要合并不同表头、整理日期，或处理 Excel 打不开的大文件，可以用免费的命令行工具 <a href="https://github.com/ebhow9986-ctrl/sheetstack-lite?ref=csvfixer">sheetstack-lite</a>，以及提供分块读取和 Excel 汇总的付费版 <a href="https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer">Sheetstack</a>。',
+        '如果要合并不同表头、整理日期，或处理 Excel 打不开的大文件，可以用免费的命令行工具 <a href="https://github.com/ebhow9986-ctrl/sheetstack-lite?ref=csvfixer">sheetstack-lite</a>，以及提供分块读取和 Excel 汇总的付费版 <a href="https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer">Sheetstack</a>。如果要在自己电脑上批量处理整个文件夹，可以用 Python + PowerShell 的 <a href="https://ebhow.gumroad.com/l/csv-script-pack?ref=csvfixer">CSV/Excel 乱码与整理脚本包</a>（随意付费，$5 起），购买也是对这个免费页面的支持。',
     },
   };
 
