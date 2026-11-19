@@ -95,7 +95,7 @@ This page on purpose does **not** include Google Analytics, Plausible, GoatCount
 Once it is on GitHub Pages, use:
 
 - **GitHub repo Insights → Traffic** (free). It shows unique visitors and referrers for the Pages site, with no change to the HTML. Numbers can lag by a day and are only visible to people with repo access.
-- **`?ref=csvfixer` on the footer links** (already applied). Gumroad records the `ref` query on the [Sheetstack](https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer) product, so you can tell visits that came from this page. GitHub may ignore `ref` on the lite repo link; it is still harmless, and Traffic will show this site as a referrer if people click through.
+- **UTM tags on the Gumroad footer links** (already applied). Gumroad ignores a bare `ref` and only counts a visit when `utm_source`, `utm_medium`, and `utm_campaign` are all present. The links use `utm_source=csvfixer`, `utm_medium=tool`, and `utm_campaign=direct`, and they still carry `ref=csvfixer`. A short inline script (no cookie and no request off this page) reads `?ref=` on this page — articles use values such as `qiita` or `zenn3` — keeps characters in `[a-z0-9-]`, limits it to 40 characters, and writes that into `utm_campaign`. With no `ref`, the campaign stays `direct`, which is also what you get with JavaScript turned off. GitHub may ignore `ref` on the lite repo link; it is still harmless, and Traffic will show this site as a referrer if people click through.
 
 Do not add a counter later without a clear decision: a privacy-friendly host such as GoatCounter would be a new third-party request.
 

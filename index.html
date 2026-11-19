@@ -131,14 +131,58 @@
         The free
         <a href="https://github.com/ebhow9986-ctrl/sheetstack-lite?ref=csvfixer">sheetstack-lite</a>
         command-line tool covers merge and clean, and the paid
-        <a href="https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer">Sheetstack</a>
+        <a href="https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer&amp;utm_source=csvfixer&amp;utm_medium=tool&amp;utm_campaign=direct">Sheetstack</a>
         toolkit adds chunked reads and an Excel summary.
-        For batch jobs on your own machine, the <a href="https://ebhow.gumroad.com/l/csv-script-pack?ref=csvfixer">CSV/Excel script pack</a> (Python + PowerShell, pay what you want from $5) converts whole folders, merges mixed encodings, keeps leading zeros and flattens JSON. Buying it also supports this free page.
+        For batch jobs on your own machine, the <a href="https://ebhow.gumroad.com/l/csv-script-pack?ref=csvfixer&amp;utm_source=csvfixer&amp;utm_medium=tool&amp;utm_campaign=direct">CSV/Excel script pack</a> (Python + PowerShell, pay what you want from $5) converts whole folders, merges mixed encodings, keeps leading zeros and flattens JSON. Buying it also supports this free page.
       </p>
     </footer>
 
     <script src="assets/csv-fixer.js"></script>
     <script src="assets/table-convert.js"></script>
     <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        "use strict";
+        // Gumroad counts a visit only when utm_source, utm_medium, and utm_campaign
+        // are all present. Static hrefs use campaign "direct"; ?ref= replaces it.
+        function campaign() {
+          var raw = "";
+          try {
+            raw = new URLSearchParams(location.search).get("ref") || "";
+          } catch (e) {}
+          raw = String(raw).toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40);
+          return raw || "direct";
+        }
+        function rewrite() {
+          var camp = campaign();
+          var links = document.querySelectorAll('a[href*="ebhow.gumroad.com"]');
+          for (var i = 0; i < links.length; i++) {
+            var a = links[i];
+            var href = a.getAttribute("href");
+            if (!href) continue;
+            try {
+              var url = new URL(href, location.href);
+              if (url.hostname !== "ebhow.gumroad.com") continue;
+              if (
+                url.searchParams.get("utm_source") === "csvfixer" &&
+                url.searchParams.get("utm_medium") === "tool" &&
+                url.searchParams.get("utm_campaign") === camp
+              ) {
+                continue;
+              }
+              url.searchParams.set("utm_source", "csvfixer");
+              url.searchParams.set("utm_medium", "tool");
+              url.searchParams.set("utm_campaign", camp);
+              a.setAttribute("href", url.origin + url.pathname + url.search + url.hash);
+            } catch (e) {}
+          }
+        }
+        rewrite();
+        var foot = document.querySelector("footer");
+        if (foot && window.MutationObserver) {
+          new MutationObserver(rewrite).observe(foot, { childList: true, subtree: true });
+        }
+      })();
+    </script>
   </body>
 </html>

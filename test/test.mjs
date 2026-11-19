@@ -187,15 +187,25 @@ test("override encoding can be applied (Shift_JIS file forced to latin-1 is moji
   assert.ok(right.startsWith("伝票番号"));
 });
 
-test("index.html has footer ref=csvfixer, no trackers, no remote scripts", () => {
+test("index.html has Gumroad UTM links, no trackers, no remote scripts", () => {
   const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  const sheet =
+    "https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer&amp;utm_source=csvfixer&amp;utm_medium=tool&amp;utm_campaign=direct";
+  const pack =
+    "https://ebhow.gumroad.com/l/csv-script-pack?ref=csvfixer&amp;utm_source=csvfixer&amp;utm_medium=tool&amp;utm_campaign=direct";
   assert.ok(html.includes("https://github.com/ebhow9986-ctrl/sheetstack-lite?ref=csvfixer"));
-  assert.ok(html.includes("https://ebhow.gumroad.com/l/sheetstack?ref=csvfixer"));
+  assert.ok(html.includes(sheet));
+  assert.ok(html.includes(pack));
+  assert.ok(html.includes("new URLSearchParams(location.search)"));
+  assert.ok(!html.includes("document.cookie"));
   assert.ok(!/google-analytics|gtag\(|plausible|goatcounter|cloudflareinsights|googletagmanager/i.test(html));
   assert.ok(!/https?:\/\/[^"']+\.js/.test(html), "page should not load a remote script");
   assert.ok(html.includes('src="assets/csv-fixer.js"'));
   assert.ok(html.includes('src="assets/app.js"'));
   assert.ok(html.includes('src="assets/table-convert.js"'));
+  const app = fs.readFileSync(path.join(root, "assets/app.js"), "utf8");
+  assert.equal(app.split(sheet).length - 1, 3, "sheetstack UTM href in en/ja/zh");
+  assert.equal(app.split(pack).length - 1, 3, "script-pack UTM href in en/ja/zh");
 });
 
 
