@@ -15,7 +15,7 @@ Open `index.html` in a current desktop browser (Chrome, Firefox, Edge, or Safari
 3. Optional: turn on “Merge files that share the same headers.” Different headers are not forced together (that is what sheetstack-lite’s `--normalize-headers` is for).
 4. Download UTF-8. A BOM is on by default so Excel on Windows does not mojibake CJK text. Several outputs are packed into an uncompressed zip, still built in the browser.
 
-The interface is English by default, with a 日本語 / 中文 toggle (stored only in `localStorage` on your machine).
+The static HTML (title, meta description, heading, and a short FAQ) is Japanese, so search engines and visitors without JavaScript see Japanese text about Excel CSV 文字化け. On load, the script picks the interface language: a language you chose with the EN / 日本語 / 中文 buttons wins (stored only in `localStorage` on your machine, key `csvfixer-lang-choice`); otherwise Japanese if the browser's preferred language starts with `ja`; otherwise English. The Japanese FAQ section stays visible in every language and the meta description is not changed by the script.
 
 ## Tab 2: JSON / table → CSV
 

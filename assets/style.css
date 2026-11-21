@@ -155,6 +155,11 @@ main { width: min(1080px, calc(100% - 2rem)); margin: 1.5rem auto 2rem; flex: 1;
 .preview th { background: var(--navy); color: #fff; font-weight: 600; }
 .preview tr:nth-child(even) td { background: #f7f9fc; }
 
+.faq { margin-top: 2.5rem; max-width: 46rem; line-height: 1.7; }
+.faq h2 { font-size: 1.2rem; color: var(--navy); margin: 0 0 0.75rem; }
+.faq h3 { font-size: 1rem; color: var(--navy); margin: 1.1rem 0 0.35rem; }
+.faq p { color: var(--muted); margin: 0; }
+
 footer {
   border-top: 1px solid var(--line);
   padding: 1.25rem 1.5rem 2rem;

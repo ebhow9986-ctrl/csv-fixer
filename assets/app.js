@@ -9,6 +9,26 @@
   var jtResult = null;
   var jtNote = "";
 
+  var LANG_KEY = "csvfixer-lang-choice";
+  var LEGACY_LANG_KEY = "csvfixer-lang"; // older builds saved "en" on every visit
+
+  function initialLang() {
+    try {
+      var saved = localStorage.getItem(LANG_KEY);
+      if (saved && I18N[saved]) return saved;
+      // The old key was written even without a click, so only trust it for
+      // ja / zh (which needed a click); a legacy "en" may just be the default.
+      var legacy = localStorage.getItem(LEGACY_LANG_KEY);
+      if (legacy === "ja" || legacy === "zh") return legacy;
+    } catch (e) {}
+    var prefs = [];
+    try {
+      if (navigator.languages && navigator.languages.length) prefs = [navigator.languages[0]];
+      else if (navigator.language) prefs = [navigator.language];
+    } catch (e) {}
+    return prefs.length && /^ja\b/i.test(String(prefs[0])) ? "ja" : "en";
+  }
+
   var I18N = {
     en: {
       brand: "CSV Encoding Fixer",
@@ -76,9 +96,9 @@
     },
     ja: {
       brand: "CSV 文字コード修正",
-      title: "ファイルを送らずに、CSV の文字コードを直す",
+      title: "Excel で文字化けした CSV を、ブラウザだけで UTF-8 に変換",
       lede:
-        "CSV をドロップすると、Shift_JIS、GB18030/GBK、Windows-1252、UTF-8、UTF-8 BOM を判定し、プレビューのあと UTF-8 で保存できます。処理はこのページの中だけで終わります。サーバーへは送らず、追跡用のスクリプトもありません。",
+        "Excel で開くと文字化けする CSV をドロップすると、Shift_JIS、GB18030/GBK、Windows-1252、UTF-8、UTF-8 BOM を判定し、プレビューのあと UTF-8 で保存できます。処理はこのページの中だけで終わります。サーバーへは送らず、追跡用のスクリプトもありません。",
       privacy: "ファイルはブラウザ内に留まります。アップロードしません。",
       dropTitle: "CSV をここにドロップ、またはクリックして選択",
       dropHint: "複数ファイルに対応しています。判定はこのページだけで行います。",
@@ -234,10 +254,11 @@
       btn.classList.toggle("is-active", btn.getAttribute("data-lang") === lang);
     });
     document.title =
-      lang === "ja" ? "CSV 文字コード修正 — ブラウザ内で処理" : lang === "zh" ? "CSV 编码修复 — 在浏览器中完成" : "CSV Encoding Fixer — in your browser";
-    try {
-      localStorage.setItem("csvfixer-lang", lang);
-    } catch (e) {}
+      lang === "ja"
+        ? "Excelで文字化けしたCSVを一発変換（Shift_JIS→UTF-8）| ブラウザだけで完結"
+        : lang === "zh"
+        ? "CSV 编码修复 — 在浏览器中完成"
+        : "CSV Encoding Fixer — fix garbled CSV for Excel (Shift_JIS → UTF-8) | 文字化け";
     render();
     renderJson();
   }
@@ -488,6 +509,11 @@
   document.querySelectorAll(".lang button").forEach(function (btn) {
     btn.addEventListener("click", function () {
       lang = btn.getAttribute("data-lang");
+      // Only an explicit click is remembered, so auto-detection never
+      // overrides a choice the visitor made.
+      try {
+        localStorage.setItem(LANG_KEY, lang);
+      } catch (e) {}
       applyLang();
     });
   });
@@ -707,10 +733,11 @@
     $("jt-copy").addEventListener("click", onJsonCopy);
   }
 
-  try {
-    var saved = localStorage.getItem("csvfixer-lang");
-    if (saved && I18N[saved]) lang = saved;
-  } catch (e) {}
+  // Language: 1) a choice saved by clicking EN / 日本語 / 中文 wins;
+  // 2) otherwise Japanese if the browser's preferred language starts with "ja";
+  // 3) otherwise English. The static HTML is Japanese so crawlers and no-JS
+  // visitors see Japanese text.
+  lang = initialLang();
   if (location.hash === "#json") setTab("json");
   else applyLang();
 })();

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CSV Encoding Fixer — in your browser</title>
+    <title>Excelで文字化けしたCSVを一発変換（Shift_JIS→UTF-8）| ブラウザだけで完結</title>
     <meta
       name="description"
-      content="Fix Shift_JIS, GBK, Windows-1252 and UTF-8 BOM CSV files in your browser. Also turn JSON or a pasted HTML table into CSV. Nothing is uploaded. Download clean UTF-8 for Excel."
+      content="Excelで開くと文字化けするCSV（Shift_JIS・GBK・Windows-1252・BOMなしUTF-8）を、ブラウザの中だけでUTF-8（BOM付き）に変換。ファイルはアップロードされません。複数ファイルの一括変換、同じ見出しのCSVの結合、JSONやHTMLの表からCSVへの変換にも対応。無料・登録不要。"
     />
     <meta name="referrer" content="no-referrer-when-downgrade" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
@@ -16,23 +16,22 @@
     <header class="top">
       <div class="brand">
         <img src="assets/favicon.svg" alt="" width="28" height="28" />
-        <span data-i18n="brand">CSV Encoding Fixer</span>
+        <span data-i18n="brand">CSV 文字コード修正</span>
       </div>
       <div class="lang" role="group" aria-label="Language">
-        <button type="button" data-lang="en" class="is-active">EN</button>
-        <button type="button" data-lang="ja">日本語</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ja" class="is-active">日本語</button>
         <button type="button" data-lang="zh">中文</button>
       </div>
     </header>
 
     <main>
       <section class="hero">
-        <h1 id="hero-title" data-i18n="title">Fix CSV encoding without leaving your computer</h1>
+        <h1 id="hero-title" data-i18n="title">Excel で文字化けした CSV を、ブラウザだけで UTF-8 に変換</h1>
         <p class="lede" id="hero-lede" data-i18n="lede">
-          Drop one or more CSV files. This page guesses Shift_JIS, GB18030/GBK, Windows-1252, UTF-8 and UTF-8 with a BOM,
-          shows a preview, and lets you download clean UTF-8. Files never leave the browser — there is no server and no tracking script.
+          Excel で開くと文字化けする CSV をドロップすると、Shift_JIS、GB18030/GBK、Windows-1252、UTF-8、UTF-8 BOM を判定し、プレビューのあと UTF-8 で保存できます。処理はこのページの中だけで終わります。サーバーへは送らず、追跡用のスクリプトもありません。
         </p>
-        <p class="pill" id="hero-privacy" data-i18n="privacy">Files stay in your browser. Nothing is uploaded.</p>
+        <p class="pill" id="hero-privacy" data-i18n="privacy">ファイルはブラウザ内に留まります。アップロードしません。</p>
       </section>
 
       <div class="tabs" role="tablist" aria-label="Tool" data-i18n-aria="tabsLabel">
@@ -44,9 +43,9 @@
 
       <section class="drop" id="drop">
         <input id="file-input" type="file" accept=".csv,text/csv,.txt" multiple hidden />
-        <p class="drop-title" data-i18n="dropTitle">Drop CSV files here, or click to choose</p>
-        <p class="drop-hint" data-i18n="dropHint">Several files are fine. Detection runs on this page only.</p>
-        <button type="button" class="btn btn-primary" id="pick" data-i18n="choose">Choose files</button>
+        <p class="drop-title" data-i18n="dropTitle">CSV をここにドロップ、またはクリックして選択</p>
+        <p class="drop-hint" data-i18n="dropHint">複数ファイルに対応しています。判定はこのページだけで行います。</p>
+        <button type="button" class="btn btn-primary" id="pick" data-i18n="choose">ファイルを選ぶ</button>
       </section>
 
       <section id="workspace" class="workspace is-hidden">
@@ -123,6 +122,21 @@
           <div id="jt-preview" class="files"></div>
         </section>
       </div>
+      <section class="faq" id="faq" lang="ja" aria-labelledby="faq-title">
+        <h2 id="faq-title">よくある質問：Excel で CSV が文字化けするとき</h2>
+        <h3>なぜ Excel で CSV が文字化けするのですか？</h3>
+        <p>
+          CSV には「どの文字コードで書かれたか」という情報がありません。Windows 版の Excel は、BOM（ファイル先頭の目印）のない CSV をパソコンの既定の文字コード（日本語環境では多くの場合 Shift_JIS）として読むことがあるため、BOM なしの UTF-8 で保存された CSV は文字化けしやすくなります。反対に、Shift_JIS や GBK の CSV を UTF-8 として読むソフトでも文字化けが起きます。
+        </p>
+        <h3>このページではどうやって直すのですか？</h3>
+        <p>
+          ファイルのバイト列から Shift_JIS、GB18030/GBK、Windows-1252、UTF-8、UTF-8 BOM のどれかを推定し、プレビューを表示します。判定は推定なので、表示がおかしいときは文字コードを選び直せます。保存すると UTF-8 の CSV になり、初期設定では Windows の Excel 向けに BOM を付けます。複数ファイルは zip にまとめて保存でき、見出しが同じファイルは 1 つに結合することもできます。
+        </p>
+        <h3>ファイルはアップロードされますか？</h3>
+        <p>
+          いいえ。読み込みと変換はブラウザの JavaScript（TextDecoder）だけで行い、ファイルの中身をサーバーへ送る処理はありません。アカウント登録は不要で、アクセス解析や追跡用のスクリプトも入れていません。
+        </p>
+      </section>
     </main>
 
     <footer>
